@@ -1,53 +1,69 @@
-| Supported Targets | ESP32 | ESP32-C2 | ESP32-C3 | ESP32-C5 | ESP32-C6 | ESP32-C61 | ESP32-H2 | ESP32-P4 | ESP32-S2 | ESP32-S3 | Linux |
-| ----------------- | ----- | -------- | -------- | -------- | -------- | --------- | -------- | -------- | -------- | -------- | ----- |
+# CP2 - Sistema de Dados Robusto
+## Sistemas de Tempo Real - FIAP 2025
 
-# Hello World Example
+### Informações do Aluno
+- **Nome:** Ricardo Fogaca
+- **RM:** 86603
+- **Sala:** 5ECS
 
-Starts a FreeRTOS task to print "Hello World".
+### Descrição do Projeto
+Sistema multitarefa implementado com FreeRTOS para ESP32, dividido em três módulos principais:
 
-(See the README.md file in the upper level 'examples' directory for more information about examples.)
+#### Módulo 1: Geração de Dados
+- Produz valores inteiros sequenciais continuamente
+- Envia cada valor para uma fila de comunicação
+- Caso a fila esteja cheia, o valor é descartado
 
-## How to use example
+#### Módulo 2: Recepção de Dados
+- Recebe os valores da fila e os transmite (exibe no terminal)
+- Usa alocação de memória dinâmica (malloc e free)
+- Implementa reação escalonada a timeouts:
+  - 10s: Recuperação leve
+  - 20s: Recuperação moderada (limpa fila)
+  - 30s: Recuperação severa (reinicia sistema)
 
-Follow detailed instructions provided specifically for this example.
+#### Módulo 3: Supervisão
+- Monitora o funcionamento dos outros módulos
+- Exibe status usando flags de controle
 
-Select the instructions depending on Espressif chip installed on your development board:
+#### Watchdog Timer
+- Configurado para monitorar as tarefas críticas
+- Timeout de 5 segundos
+- Reinicia o dispositivo em caso de travamento
 
-- [ESP32 Getting Started Guide](https://docs.espressif.com/projects/esp-idf/en/stable/get-started/index.html)
-- [ESP32-S2 Getting Started Guide](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s2/get-started/index.html)
+### Execução
+![Print da Execução](screenshot.png)
 
-
-## Example folder contents
-
-The project **hello_world** contains one source file in C language [hello_world_main.c](main/hello_world_main.c). The file is located in folder [main](main).
-
-ESP-IDF projects are built using CMake. The project build configuration is contained in `CMakeLists.txt` files that provide set of directives and instructions describing the project's source files and targets (executable, library, or both).
-
-Below is short explanation of remaining files in the project folder.
-
+### Estrutura do Projeto
 ```
+cp2_ricardo_fogaca/
+├── main/
+│   ├── main.c
+│   └── CMakeLists.txt
 ├── CMakeLists.txt
-├── pytest_hello_world.py      Python script used for automated testing
-├── main
-│   ├── CMakeLists.txt
-│   └── hello_world_main.c
-└── README.md                  This is the file you are currently reading
+└── README.md
 ```
 
-For more information on structure and contents of ESP-IDF projects, please refer to Section [Build System](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/build-system.html) of the ESP-IDF Programming Guide.
+### Como Compilar e Executar
+```bash
+idf.py set-target esp32
+idf.py build
+idf.py -p COM5 flash monitor
+```
 
-## Troubleshooting
+### Requisitos
+<img width="886" height="601" alt="image" src="https://github.com/user-attachments/assets/e894dd48-0b7b-46d8-88ed-b435a40fd273" />
+<img width="886" height="598" alt="image" src="https://github.com/user-attachments/assets/3956b2f9-fdda-4966-a267-846f9e35c629" />
+<img width="886" height="381" alt="image" src="https://github.com/user-attachments/assets/716fc95a-c4f3-47d6-a428-ff46205ba96a" />
+<img width="886" height="313" alt="image" src="https://github.com/user-attachments/assets/75b183c5-81b5-4f00-9c79-8e6d6921e2cf" />
+<img width="886" height="415" alt="image" src="https://github.com/user-attachments/assets/62d38e93-2d38-4450-ade6-1003cd954f83" />
 
-* Program upload failure
 
-    * Hardware connection is not correct: run `idf.py -p PORT monitor`, and reboot your board to see if there are any output logs.
-    * The baud rate for downloading is too high: lower your baud rate in the `menuconfig` menu, and try again.
 
-## Technical support and feedback
 
-Please use the following feedback channels:
 
-* For technical queries, go to the [esp32.com](https://esp32.com/) forum
-* For a feature request or bug report, create a [GitHub issue](https://github.com/espressif/esp-idf/issues)
 
-We will get back to you as soon as possible.
+
+- ESP-IDF v5.4.2
+- ESP32
+- FreeRTOS
