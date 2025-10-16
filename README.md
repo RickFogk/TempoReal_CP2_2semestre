@@ -38,7 +38,7 @@ Sistema multitarefa implementado com FreeRTOS para ESP32, dividido em três mód
 ```
 cp2_ricardo_fogaca/
 ├── main/
-│   ├── main.c
+│   ├── hello_world_main.c
 │   └── CMakeLists.txt
 ├── CMakeLists.txt
 └── README.md
